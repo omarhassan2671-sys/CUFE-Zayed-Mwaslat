@@ -1,4 +1,6 @@
 let marker;
+let detectedZone = "";
+let detectedName = "";
 
 // Map setup
 const map = L.map('map').setView([30.0444, 31.2357], 11);
@@ -44,7 +46,7 @@ function levenshtein(a, b) {
 // Zones list with all spelling variations
 const zones = {
     "basatein": ["basatein", "basateen", "basaetien", "basaatein", "dar el salam", "dar elsalam", "dar el salem", "el salam city", "salam city"],
-    "tahrir": ["sayeda zaineb", "sayeda zainab", "downtown", "manial", "el manial", "al manial", "el-mania", "el maniya", "maniya", "misr kadima", "misr el qadima", "kasr el aini", "garden plaza"],
+    "tahrir": ["tahrir", "downtown", "sayeda zaineb", "sayeda zainab", "manial", "el manial", "al manial", "el-mania", "el maniya", "maniya", "misr kadima", "misr el qadima", "kasr el aini", "garden plaza"],
     "maadi": ["maadi", "ma'adi", "maadiy", "zahraa maadi", "zahraa el maadi"],
     "new cairo": ["new cairo", "cairo new", "cairo new city"],
     "nasr": ["nasr city", "nasr", "nasr city"],
@@ -70,7 +72,8 @@ const fallback = {
     "madinaty": "badr",
     "new cairo": "new cairo",
     "cairo": "tahrir",
-    "giza": "giza",
+    "downtown": "tahrir",
+    "tahrir": "tahrir",
     "helwan": "helwan",
     "nasr": "nasr",
     "maadi": "maadi",
@@ -177,8 +180,8 @@ function matchName(name) {
     return "unknown";
 }
 
-// generate output
-async function generateRoute() {
+// confirm button
+async function confirmRegion() {
     if (!marker) {
         alert("Please select your location on the map.");
         return;
@@ -187,9 +190,49 @@ async function generateRoute() {
     const { lat, lng } = marker.getLatLng();
     const zoneData = await detectZone(lat, lng);
 
-    const matchedZone = fuzzyZoneMatch(zoneData);
-    const text = getRouteText(matchedZone);
+    detectedZone = fuzzyZoneMatch(zoneData);
+    detectedName = zoneData.neighbourhood || zoneData.suburb || zoneData.city_district || zoneData.city;
+
+    document.getElementById("confirmText").innerText =
+        `Detected region: ${detectedName || "Unknown"}\nIs this correct?`;
+
+    document.getElementById("confirmBox").style.display = "block";
+}
+
+// yes
+function yesRegion() {
+    const text = getRouteText(detectedZone);
+    document.getElementById("result").innerText =
+        `Region confirmed: ${detectedZone}\nRoute:\n${text}`;
+
+    document.getElementById("confirmBox").style.display = "none";
+    document.getElementById("manualSelect").style.display = "none";
+}
+
+// no
+function noRegion() {
+    document.getElementById("confirmBox").style.display = "none";
+    document.getElementById("manualSelect").style.display = "block";
+
+    // add options
+    const select = document.getElementById("regionSelect");
+    select.innerHTML = "";
+
+    Object.keys(zones).forEach(z => {
+        const option = document.createElement("option");
+        option.value = z;
+        option.text = z;
+        select.appendChild(option);
+    });
+}
+
+// manual choose
+function selectRegion() {
+    const chosen = document.getElementById("regionSelect").value;
+    const text = getRouteText(chosen);
 
     document.getElementById("result").innerText =
-        `Detected: ${zoneData.neighbourhood || zoneData.suburb || zoneData.city_district || zoneData.city}\nMatched zone: ${matchedZone}\nRoute:\n${text}`;
+        `Region chosen manually: ${chosen}\nRoute:\n${text}`;
+
+    document.getElementById("manualSelect").style.display = "none";
 }

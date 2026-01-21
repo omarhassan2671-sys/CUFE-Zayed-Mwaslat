@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <title>Route Generator</title>
 
-    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
     <link rel="stylesheet" href="style.css">
@@ -21,14 +19,24 @@
 
         <div id="map"></div>
 
-        <button onclick="generateRoute()">Generate Route</button>
+        <button onclick="confirmRegion()">Confirm Region</button>
+
+        <div id="confirmBox" style="display:none;">
+            <p id="confirmText"></p>
+            <button onclick="yesRegion()">Yes</button>
+            <button onclick="noRegion()">No</button>
+        </div>
+
+        <div id="manualSelect" style="display:none;">
+            <p>Select your region manually:</p>
+            <select id="regionSelect"></select>
+            <button onclick="selectRegion()">Choose</button>
+        </div>
+
         <div id="result"></div>
     </div>
 
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <!-- Your JS -->
     <script src="script.js"></script>
 </body>
 </html>
