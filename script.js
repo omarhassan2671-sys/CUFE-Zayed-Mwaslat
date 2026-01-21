@@ -13,7 +13,6 @@ map.on('click', function (e) {
     marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
 });
 
-
 // Levenshtein distance for fuzzy matching
 function levenshtein(a, b) {
     const matrix = [];
@@ -44,12 +43,12 @@ function levenshtein(a, b) {
 
 // Zones list with all spelling variations
 const zones = {
-    "basatein": ["basatein", "basateen", "basaetien", "basatein", "basaatein"],
+    "basatein": ["basatein", "basateen", "basaetien", "basatein", "basaatein", "dar el salam", "dar elsalam", "dar el salem"],
     "tahrir": ["sayeda zaineb", "sayeda zainab", "downtown", "manial", "misr kadima", "misr el qadima", "kasr el aini", "garden plaza"],
     "maadi": ["maadi", "ma'adi", "maadiy", "zahraa maadi", "zahraa el maadi"],
     "new cairo": ["new cairo", "cairo new", "cairo new city"],
     "nasr": ["nasr city", "nasr", "nasr city"],
-    "badr": ["badr", "obour", "obour city", "salam", "madinaty", "shorouq", "shorooq"],
+    "badr": ["badr", "obour", "obour city", "salam", "madinaty", "shorouq", "shorooq", "sheraton", "sheraton city"],
     "helwan": ["helwan"],
     "mohandeseen": ["mohandeseen", "mohandesien", "mohandesin", "mohandisin", "mohandseen"],
     "shoubra": ["shoubra", "shubra"],
@@ -74,7 +73,10 @@ const fallback = {
     "giza": "giza",
     "helwan": "helwan",
     "nasr": "nasr",
-    "maadi": "maadi"
+    "maadi": "maadi",
+    "sheraton": "badr",
+    "dar el salam": "basatein",
+    "dar elsalam": "basatein"
 };
 
 function getRouteText(zone) {
@@ -90,7 +92,7 @@ function getRouteText(zone) {
     if (zones["mohandeseen"].includes(zone)) return "law enta orayeb mn meidan lebnan erkab mn henak le hyper law enta orayeb mn metro tawfikia mmken trkab mn henak 3alatol le hyper";
     if (zones["shoubra"].includes(zone)) return "erkab metro le sadat w mn henak roo7 le mawkaf abd el men3m reyad w erkab le hyper";
     if (zones["imbaba"].includes(zone)) return "mmkn terkab metro le mahta tawfikia w tmshi lehad medan lebnan (10 minute walk) w mn henak erkab le hyper";
-    if (zones["giza"].includes(zone)) return "momken trkab bus M21 hynzelak 3and el gam3a or mmkn terkab M20 w tnzl 3and hyper";
+    if (zones["giza"].includes(zone)) return "momken trkab bus M21 hynzelak 3and el gam3a or mmkn terkab M20 w tnzl 3and hyper aw law enta orayeb mn meidan el giza erkab mn henak hyper 3alatol";
     if (zones["mokattam"].includes(zone)) return "erkab tahrir w mn henak erkab le hyper";
     if (zones["october"].includes(zone)) return "erkab bus M10 w enzl 3and hyper";
     if (zones["moneib"].includes(zone)) return "erkb le hyper 3alatol";
