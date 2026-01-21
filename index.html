@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>District Location Selector</title>
+
+    <!-- Leaflet map library -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h2>Enter Your District</h2>
+    <p>Examples: Maadi, Downtown, Sheikh Zayed, Tagmo3</p>
+
+    <input id="districtInput" type="text" placeholder="Enter your district">
+
+    <h3>Select your location (Cairo & Giza only)</h3>
+    <div id="map"></div>
+
+    <button onclick="generateText()">Submit</button>
+
+    <h3>Result</h3>
+    <p id="result"></p>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Your JS -->
+    <script src="script.js"></script>
+
+</body>
+</html>
