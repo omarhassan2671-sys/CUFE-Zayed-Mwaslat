@@ -21,7 +21,7 @@ body {
 }
 
 #map {
-    height: 350px;
+    height: 350px; /* IMPORTANT */
     width: 100%;
     border: 2px solid #2f4bff;
     border-radius: 12px;
