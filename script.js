@@ -1,44 +1,33 @@
 let marker;
 
-// Cairo & Giza bounds
-const BOUNDS = {
-    north: 30.20,
-    south: 29.85,
-    west: 30.85,
-    east: 31.60
-};
+// Map setup
+const map = L.map('map').setView([30.0444, 31.2357], 11);
 
-// Map
-const map = L.map("map", {
-    maxBounds: [
-        [BOUNDS.south, BOUNDS.west],
-        [BOUNDS.north, BOUNDS.east]
-    ],
-    maxBoundsViscosity: 1.0
-}).setView([30.0444, 31.2357], 11);
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap"
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
 }).addTo(map);
 
-// Click to place marker
-map.on("click", (e) => {
-    const { lat, lng } = e.latlng;
+// Click to add marker
+map.on('click', function (e) {
+    const lat = e.latlng.lat;
+    const lng = e.latlng.lng;
 
-    if (marker) map.removeLayer(marker);
+    if (marker) {
+        map.removeLayer(marker);
+    }
     marker = L.marker([lat, lng]).addTo(map);
 });
 
-// Zone detection by simple coordinates
+// Region detection based on coordinates (approx)
 function getRegion(lat, lng) {
-    // Basatein (approx)
+    // Basatein
     if (lat >= 29.95 && lat <= 30.00 && lng >= 31.25 && lng <= 31.30) return "basatein";
-
-    // Maadi
-    if (lat >= 29.95 && lat <= 30.00 && lng >= 31.20 && lng <= 31.28) return "maadi";
 
     // Downtown / Tahrir
     if (lat >= 30.03 && lat <= 30.07 && lng >= 31.22 && lng <= 31.27) return "tahrir";
+
+    // Maadi
+    if (lat >= 29.95 && lat <= 30.00 && lng >= 31.20 && lng <= 31.28) return "maadi";
 
     // Nasr City
     if (lat >= 30.05 && lat <= 30.12 && lng >= 31.26 && lng <= 31.35) return "nasr";
@@ -70,11 +59,10 @@ function getRegion(lat, lng) {
     // Bahr El Azzam
     if (lat >= 30.00 && lat <= 30.05 && lng >= 31.12 && lng <= 31.20) return "bahr";
 
-    // Default
     return "unknown";
 }
 
-// Output text based on region
+// Text output based on region
 function getRouteText(region) {
     switch (region) {
         case "basatein":
