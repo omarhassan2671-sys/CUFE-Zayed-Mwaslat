@@ -12,7 +12,7 @@ body {
 .container {
     text-align: center;
     width: 90%;
-    max-width: 600px;
+    max-width: 700px;
     padding: 30px;
     border: 2px solid #2f4bff;
     border-radius: 20px;
@@ -20,14 +20,13 @@ body {
     box-shadow: 0 0 30px rgba(47, 75, 255, 0.6);
 }
 
-input {
-    width: 90%;
-    padding: 12px;
+#map {
+    height: 350px;
+    width: 100%;
+    border: 2px solid #2f4bff;
     border-radius: 12px;
-    border: 1px solid #2f4bff;
-    background: rgba(20, 26, 48, 0.8);
-    color: #e0e8ff;
-    font-size: 16px;
+    box-shadow: 0 0 20px rgba(47, 75, 255, 0.5);
+    margin-bottom: 15px;
 }
 
 button {

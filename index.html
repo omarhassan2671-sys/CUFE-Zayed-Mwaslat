@@ -9,20 +9,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Route Generator</h1>
-        <p>Enter your region (example: Maadi, Downtown, Nasr City...)</p>
+        <p>Click your region on the map (Cairo & Giza only)</p>
 
-        <input id="regionInput" type="text" placeholder="Enter your region here">
+        <div id="map"></div>
 
         <button onclick="generateRoute()">Generate Route</button>
-
         <div id="result"></div>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
