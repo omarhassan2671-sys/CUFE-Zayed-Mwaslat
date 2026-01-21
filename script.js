@@ -1,83 +1,55 @@
-// =====================
-// ADMIN CONTROLS ZONE
-// =====================
-const ADMIN_SELECTED_ZONE = "MAADI";
-// MAADI | DOWNTOWN | SHEIKH_ZAYED | TAGMO3
+function generateRoute() {
+    const region = document.getElementById("regionInput").value.trim().toLowerCase();
 
-// Zone texts
-const zoneText = {
-    MAADI: "This area is known for its greenery and residential calm.",
-    DOWNTOWN: "This area is highly urban with strong commercial activity.",
-    SHEIKH_ZAYED: "This zone features modern compounds and wide roads.",
-    TAGMO3: "This area is a premium residential and business district."
-};
+    let output = "المنطقة غير موجودة في القائمة.";
 
-// =====================
-// CAIRO + GIZA BOUNDS
-// =====================
-const CAIRO_GIZA_BOUNDS = {
-    north: 30.20,
-    south: 29.85,
-    west: 30.85,
-    east: 31.60
-};
+    const basatein = ["basatein", "basateen"];
+    const tahrir = ["sayeda zaineb", "downtown", "manial", "misr kadima", "kasr el aini", "garden plaza"];
+    const maadi = ["maadi", "zahraa maadi"];
+    const newCairo = ["new cairo"];
+    const nasr = ["nasr city"];
+    const badr = ["badr", "obour", "salam", "madinaty", "shorouq"];
+    const helwan = ["helwan"];
+    const mohandesien = ["mohandeseen", "mohandesien"];
+    const shoubra = ["shoubra"];
+    const imbaba = ["imbaba", "kawmeia", "waraq"];
+    const giza = ["giza", "giza square", "cairo uni", "cairo university"];
+    const mokattam = ["mokattam"];
+    const october = ["october"];
+    const moneib = ["moneib"];
+    const bahr = ["bahr el a3zam", "bahr el azzam", "bahr el aazam"];
 
-// Initialize map (centered on Cairo)
-const map = L.map('map', {
-    maxBounds: [
-        [CAIRO_GIZA_BOUNDS.south, CAIRO_GIZA_BOUNDS.west],
-        [CAIRO_GIZA_BOUNDS.north, CAIRO_GIZA_BOUNDS.east]
-    ],
-    maxBoundsViscosity: 1.0
-}).setView([30.0444, 31.2357], 11);
-
-let marker;
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-}).addTo(map);
-
-// Click handling
-map.on('click', function (e) {
-    const { lat, lng } = e.latlng;
-
-    // Check if inside Cairo/Giza
-    if (
-        lat > CAIRO_GIZA_BOUNDS.north ||
-        lat < CAIRO_GIZA_BOUNDS.south ||
-        lng < CAIRO_GIZA_BOUNDS.west ||
-        lng > CAIRO_GIZA_BOUNDS.east
-    ) {
-        alert("Location must be inside Cairo or Giza.");
-        return;
+    if (basatein.includes(region)) {
+        output = "erkab metro hadayek el maadi aw maadi w mn henak enzl sadat w erkab mn mawkaf abd el men3m reyad le hyper 1";
+    } else if (tahrir.includes(region)) {
+        output = "erkab le el tahrir w mn henak erkab le hyper one";
+    } else if (maadi.includes(region)) {
+        output = "momken trkab metro w tnzl sadat w trkb mn mawkaf henak aw trkb 3arbeyat tahrir mn Arab maadi w erkab hyper mn henak";
+    } else if (newCairo.includes(region)) {
+        output = "erkab ay haga twadeik tahrir(bus mwaslt masr) aw erkb le ramseis w mn henak erkab le hyper";
+    } else if (nasr.includes(region)) {
+        output = "erkab le ramses aw tahrir w mn henak erkab hyper";
+    } else if (badr.includes(region)) {
+        output = "erkab maw2af el salam w mn henak erkab hyper";
+    } else if (helwan.includes(region)) {
+        output = "erkab metro lhad mhata sadat w mn henak erkab mn mawkaf abd el men3m reiad le hyper";
+    } else if (mohandesien.includes(region)) {
+        output = "law enta orayeb mn meidan lebnan erkab mn henak le hyper law enta orayeb mn metro tawfikia mmken trkab mn henak 3alatol le hyper";
+    } else if (shoubra.includes(region)) {
+        output = "erkab metro le sadat w mn henak roo7 le mawkaf abd el men3m reyad w erkab le hyper";
+    } else if (imbaba.includes(region)) {
+        output = "mmkn terkab metro le mahta tawfikia w tmshi lehad medan lebnan (10 minute walk) w mn henak erkab le hyper";
+    } else if (giza.includes(region)) {
+        output = "momken trkab bus M21 hynzelak 3and el gam3a or mmkn terkab M20 w tnzl 3and hyper";
+    } else if (mokattam.includes(region)) {
+        output = "erkab tahrir w mn henak erkab le hyper";
+    } else if (october.includes(region)) {
+        output = "erkab bus M10 w enzl 3and hyper";
+    } else if (moneib.includes(region)) {
+        output = "erkb le hyper 3alatol";
+    } else if (bahr.includes(region)) {
+        output = "erkb le hyper 3alatol";
     }
 
-    if (marker) {
-        map.removeLayer(marker);
-    }
-
-    marker = L.marker([lat, lng]).addTo(map);
-});
-
-// Generate result
-function generateText() {
-    const district = document.getElementById("districtInput").value.trim();
-
-    if (!district) {
-        alert("Please enter your district.");
-        return;
-    }
-
-    if (!marker) {
-        alert("Please select a location inside Cairo or Giza.");
-        return;
-    }
-
-    const resultText = `
-District entered: ${district}
-Admin-selected zone: ${ADMIN_SELECTED_ZONE}
-Generated text: ${zoneText[ADMIN_SELECTED_ZONE]}
-    `;
-
-    document.getElementById("result").innerText = resultText;
+    document.getElementById("result").innerText = output;
 }

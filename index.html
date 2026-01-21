@@ -1,40 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet"> 
-<meta charset="UTF-8">
-    <title>District Location Selector</title>
+    <meta charset="UTF-8">
+    <title>Route Generator</title>
 
-    <!-- Leaflet map library -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Route Generator</h1>
+        <p>Enter your region (example: Maadi, Downtown, Nasr City...)</p>
 
-    <h2>Enter Your District</h2>
-    <p>Examples: Maadi, Downtown, Sheikh Zayed, Tagmo3</p>
+        <input id="regionInput" type="text" placeholder="Enter your region here">
 
-    <input id="districtInput" type="text" placeholder="Enter your district">
+        <button onclick="generateRoute()">Generate Route</button>
 
-    <h3>Select your location (Cairo & Giza only)</h3>
-    <div id="map"></div>
+        <div id="result"></div>
+    </div>
 
-    <button onclick="generateText()">Submit</button>
-
-    <h3>Result</h3>
-    <p id="result"></p>
-
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <!-- Your JS -->
     <script src="script.js"></script>
-
 </body>
 </html>
