@@ -44,7 +44,7 @@ function levenshtein(a, b) {
 // Zones list with all spelling variations
 const zones = {
     "basatein": ["basatein", "basateen", "basaetien", "basaatein", "dar el salam", "dar elsalam", "dar el salem", "el salam city", "salam city"],
-    "tahrir": ["sayeda zaineb", "sayeda zainab", "downtown", "manial", "el manial", "al manial", "misr kadima", "misr el qadima", "kasr el aini", "garden plaza"],
+    "tahrir": ["sayeda zaineb", "sayeda zainab", "downtown", "manial", "el manial", "al manial", "el-mania", "el maniya", "maniya", "misr kadima", "misr el qadima", "kasr el aini", "garden plaza"],
     "maadi": ["maadi", "ma'adi", "maadiy", "zahraa maadi", "zahraa el maadi"],
     "new cairo": ["new cairo", "cairo new", "cairo new city"],
     "nasr": ["nasr city", "nasr", "nasr city"],
