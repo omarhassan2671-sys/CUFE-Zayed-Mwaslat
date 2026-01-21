@@ -42,22 +42,22 @@ function levenshtein(a, b) {
     return matrix[b.length][a.length];
 }
 
-// Zones list
+// Zones list with all spelling variations
 const zones = {
-    "basatein": ["basatein", "basateen"],
-    "tahrir": ["sayeda zaineb", "downtown", "manial", "misr kadima", "kasr el aini", "garden plaza"],
-    "maadi": ["maadi", "zahraa maadi"],
-    "new cairo": ["new cairo"],
-    "nasr": ["nasr city"],
-    "badr": ["badr", "obour", "salam", "madinaty", "shorouq"],
+    "basatein": ["basatein", "basateen", "basaetien", "basatein", "basaatein"],
+    "tahrir": ["sayeda zaineb", "sayeda zainab", "downtown", "manial", "misr kadima", "misr el qadima", "kasr el aini", "garden plaza"],
+    "maadi": ["maadi", "ma'adi", "maadiy", "zahraa maadi", "zahraa el maadi"],
+    "new cairo": ["new cairo", "cairo new", "cairo new city"],
+    "nasr": ["nasr city", "nasr", "nasr city"],
+    "badr": ["badr", "obour", "obour city", "salam", "madinaty", "shorouq", "shorooq"],
     "helwan": ["helwan"],
-    "mohandeseen": ["mohandeseen", "mohandesien", "mohandesin"],
-    "shoubra": ["shoubra"],
-    "imbaba": ["imbaba", "kawmeia", "waraq"],
-    "giza": ["giza", "giza square", "cairo uni", "cairo university"],
-    "mokattam": ["mokattam"],
-    "october": ["october"],
-    "moneib": ["moneib"],
+    "mohandeseen": ["mohandeseen", "mohandesien", "mohandesin", "mohandisin", "mohandseen"],
+    "shoubra": ["shoubra", "shubra"],
+    "imbaba": ["imbaba", "kawmeia", "waraq", "waraq"],
+    "giza": ["giza", "giza square", "cairo uni", "cairo university", "al jiza"],
+    "mokattam": ["mokattam", "mokatam"],
+    "october": ["october", "6th of october", "6 october", "oct"],
+    "moneib": ["moneib", "moneeb"],
     "bahr": ["bahr el a3zam", "bahr el azzam", "bahr el aazam"]
 };
 
@@ -71,7 +71,10 @@ const fallback = {
     "madinaty": "badr",
     "new cairo": "new cairo",
     "cairo": "tahrir",
-    "giza": "giza"
+    "giza": "giza",
+    "helwan": "helwan",
+    "nasr": "nasr",
+    "maadi": "maadi"
 };
 
 function getRouteText(zone) {
@@ -103,39 +106,68 @@ function detectZone(lat, lng) {
     return fetch(url)
         .then(res => res.json())
         .then(data => {
-            const zone = data.address.city_district || data.address.suburb || data.address.neighbourhood || data.address.village || data.address.town || data.address.city;
-            return zone || "unknown";
+            return {
+                city_district: data.address.city_district || "",
+                suburb: data.address.suburb || "",
+                neighbourhood: data.address.neighbourhood || "",
+                village: data.address.village || "",
+                town: data.address.town || "",
+                city: data.address.city || "",
+                county: data.address.county || "",
+                state: data.address.state || ""
+            };
         });
 }
 
 // fuzzy match zone
-function fuzzyZoneMatch(zoneName) {
-    zoneName = zoneName.toLowerCase();
+function fuzzyZoneMatch(zoneData) {
+    const allNames = [
+        zoneData.neighbourhood,
+        zoneData.suburb,
+        zoneData.city_district,
+        zoneData.city,
+        zoneData.county,
+        zoneData.state
+    ].filter(Boolean);
+
+    // try each name in order
+    for (const name of allNames) {
+        const result = matchName(name);
+        if (result !== "unknown") return result;
+    }
+
+    // fallback to closest fuzzy
+    const combined = allNames.join(" ");
+    return matchName(combined);
+}
+
+function matchName(name) {
+    name = name.toLowerCase();
 
     // exact match
     for (const z in zones) {
-        for (const name of zones[z]) {
-            if (name === zoneName) return z;
+        for (const n of zones[z]) {
+            if (n === name) return z;
         }
     }
 
-    // fuzzy match using Levenshtein
+    // fuzzy match
     let best = { zone: null, distance: Infinity };
 
     for (const z in zones) {
-        for (const name of zones[z]) {
-            const dist = levenshtein(zoneName, name);
+        for (const n of zones[z]) {
+            const dist = levenshtein(name, n);
             if (dist < best.distance) {
                 best = { zone: z, distance: dist };
             }
         }
     }
 
-    if (best.distance <= 2) return best.zone;
+    if (best.distance <= 3) return best.zone;
 
     // fallback rules
     for (const key in fallback) {
-        if (zoneName.includes(key)) return fallback[key];
+        if (name.includes(key)) return fallback[key];
     }
 
     return "unknown";
@@ -149,11 +181,11 @@ async function generateRoute() {
     }
 
     const { lat, lng } = marker.getLatLng();
-    const rawZone = await detectZone(lat, lng);
+    const zoneData = await detectZone(lat, lng);
 
-    const matchedZone = fuzzyZoneMatch(rawZone);
+    const matchedZone = fuzzyZoneMatch(zoneData);
     const text = getRouteText(matchedZone);
 
     document.getElementById("result").innerText =
-        `Region detected: ${rawZone}\nMatched zone: ${matchedZone}\nRoute:\n${text}`;
+        `Detected: ${zoneData.neighbourhood || zoneData.suburb || zoneData.city_district || zoneData.city}\nMatched zone: ${matchedZone}\nRoute:\n${text}`;
 }
